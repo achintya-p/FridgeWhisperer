@@ -1,34 +1,37 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  apiKey: "AIzaSyDyYOJPB1RARmLXcVrYc8xj7SN3T0_bDD4",
+  authDomain: "fridgewhisper.firebaseapp.com",
+  projectId: "fridgewhisper",
+  storageBucket: "fridgewhisper.appspot.com",
+  messagingSenderId: "702372787407",
+  appId: "1:702372787407:web:f9d5c5d15c33d32d59f3ba"
 };
 
-let app;
-let auth;
-let db;
-let googleProvider;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-try {
-  // Initialize Firebase
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  googleProvider = new GoogleAuthProvider();
-  
-  // Configure Google Auth Provider
-  googleProvider.setCustomParameters({
-    prompt: 'select_account'
+// Initialize Auth
+const auth = getAuth(app);
+
+// Set persistence to LOCAL
+setPersistence(auth, browserLocalPersistence)
+  .catch((error) => {
+    console.error("Auth persistence error:", error);
   });
-} catch (error) {
-  console.error('Error initializing Firebase:', error);
-}
+
+// Initialize Firestore
+const db = getFirestore(app);
+
+// Configure Google Provider with custom parameters
+const googleProvider = new GoogleAuthProvider();
+googleProvider.addScope('email');
+googleProvider.addScope('profile');
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
 export { auth, googleProvider, db }; 
