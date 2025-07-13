@@ -1,0 +1,8 @@
+{
+  "short_name": "FridgeWhisperer",
+  "name": "FridgeWhisperer - AI Kitchen Assistant",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+} 
